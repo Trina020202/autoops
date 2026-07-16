@@ -7,6 +7,24 @@ AutoOps is a full-stack Flask demo for a dealership operations team. It turns a 
 - Email: `demo@autoops.local`
 - Password: `autoops123`
 
+## Screenshots
+
+### Login
+
+![Login](docs/screenshots/01-login.png)
+
+### Dashboard
+
+![Dashboard](docs/screenshots/02-dashboard.png)
+
+### Vehicle management
+
+![Vehicles](docs/screenshots/03-vehicles.png)
+
+### Sales management
+
+![Sales](docs/screenshots/04-sales.png)
+
 ## Features
 
 - User login and protected internal pages
