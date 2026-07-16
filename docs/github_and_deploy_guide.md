@@ -70,7 +70,7 @@ pip install -r requirements.txt
 6. Start command:
 
 ```bash
-gunicorn app:app
+gunicorn wsgi:app
 ```
 
 7. Add environment variable:

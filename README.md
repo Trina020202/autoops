@@ -92,7 +92,7 @@ This repository includes `render.yaml`, so Render can detect the web service con
 Manual settings:
 
 - Build command: `pip install -r requirements.txt`
-- Start command: `gunicorn app:app`
+- Start command: `gunicorn wsgi:app`
 - Environment variables:
   - `SECRET_KEY`: generated or any long random value
   - `AUTOOPS_DATABASE`: `/tmp/autoops.sqlite`
