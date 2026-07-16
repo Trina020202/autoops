@@ -1,10 +1,10 @@
 {% extends "base.html" %}
-{% block title %}AI Sales Analyst - AutoOps{% endblock %}
+{% block title %}Copilot - AutoOps{% endblock %}
 {% block content %}
 <header class="page-header">
     <div>
-        <p class="eyebrow">RAG database agent</p>
-        <h1>AutoOps AI Sales Analyst</h1>
+        <p class="eyebrow">Natural language analytics</p>
+        <h1>AutoOps Copilot</h1>
     </div>
 </header>
 
@@ -12,12 +12,12 @@
     <div class="panel copilot-query-panel">
         <div class="panel-heading">
             <h2>Ask operations data</h2>
-            <span>RAG + tool-calling workflow</span>
+            <span>Template-based NL2SQL MVP</span>
         </div>
         <form method="post" class="copilot-form">
             <label>
                 Natural language question
-                <textarea name="question" rows="4" placeholder="e.g. Analyze why sales decreased in Q2 and suggest actions" required>{{ question }}</textarea>
+                <textarea name="question" rows="4" placeholder="e.g. 查询过去三个月销量最高的三个品牌" required>{{ question }}</textarea>
             </label>
             <button class="primary-button" type="submit">Run query</button>
         </form>
@@ -30,14 +30,14 @@
 
     <aside class="panel">
         <div class="panel-heading">
-            <h2>Agent capabilities</h2>
+            <h2>Supported intents</h2>
         </div>
         <ul class="plain-list">
-            <li>Retrieve schema docs, metrics, and business rules</li>
-            <li>Generate safe read-only SQL from business questions</li>
-            <li>Call database, metric, chart, and report tools</li>
-            <li>Plan multi-step diagnosis for trend and pipeline questions</li>
-            <li>Explain results with operational recommendations</li>
+            <li>Brand sales ranking by units or revenue</li>
+            <li>Sales representative performance</li>
+            <li>Inventory grouped by brand</li>
+            <li>Monthly sales trend</li>
+            <li>Customer value ranking</li>
         </ul>
     </aside>
 </section>
@@ -48,53 +48,6 @@
         <p class="empty">{{ result.summary }}</p>
     </section>
     {% else %}
-    <section class="panel">
-        <div class="panel-heading">
-            <h2>Analyst report</h2>
-            <span>{{ result.summary }}</span>
-        </div>
-        <div class="insight-list">
-            {% for item in result.report %}
-            <p>{{ item }}</p>
-            {% endfor %}
-        </div>
-    </section>
-
-    <section class="agent-grid">
-        <article class="panel">
-            <div class="panel-heading">
-                <h2>Retrieved knowledge</h2>
-                <span>RAG context</span>
-            </div>
-            <div class="knowledge-list">
-                {% for chunk in result.retrieved_context %}
-                <section class="knowledge-item">
-                    <strong>{{ chunk.title }}</strong>
-                    <span>{{ chunk.source }} · score {{ chunk.score }}</span>
-                    <p>{{ chunk.text }}</p>
-                </section>
-                {% else %}
-                <p class="empty">No knowledge chunks retrieved.</p>
-                {% endfor %}
-            </div>
-        </article>
-
-        <article class="panel">
-            <div class="panel-heading">
-                <h2>Agent plan</h2>
-                <span>{{ result.intent }}</span>
-            </div>
-            <ol class="step-list">
-                {% for step in result.plan_steps %}
-                <li>
-                    <strong>{{ step.step }}</strong>
-                    <span>{{ step.detail }}</span>
-                </li>
-                {% endfor %}
-            </ol>
-        </article>
-    </section>
-
     <section class="result-grid">
         <article class="panel">
             <div class="panel-heading">
@@ -112,7 +65,7 @@
         <article class="panel">
             <div class="panel-heading">
                 <h2>Chart</h2>
-                <span>{{ result.chart_title }}</span>
+                <span>{{ result.summary }}</span>
             </div>
             <div class="bar-list copilot-bars">
                 {% for row in result.rows %}
@@ -150,7 +103,7 @@
                     {% for row in result.rows %}
                     <tr>
                         {% for column in result.columns %}
-                        <td>{{ row[column]|money if "revenue" in column or "price" in column or "value" in column or column == "avg_deal" else row[column] }}</td>
+                        <td>{{ row[column]|money if column == "revenue" or column == "avg_price" else row[column] }}</td>
                         {% endfor %}
                     </tr>
                     {% else %}
@@ -160,62 +113,6 @@
             </table>
         </div>
     </section>
-
-    <section class="panel">
-        <div class="panel-heading">
-            <h2>Tool calls</h2>
-            <span>{{ result.tool_calls|length }} executed</span>
-        </div>
-        <div class="tool-call-list">
-            {% for call in result.tool_calls %}
-            <section class="tool-call">
-                <strong>{{ call.name }}()</strong>
-                <p>{{ call.purpose }}</p>
-                <dl>
-                    <div>
-                        <dt>Input</dt>
-                        <dd>{{ call.input }}</dd>
-                    </div>
-                    <div>
-                        <dt>Output</dt>
-                        <dd>{{ call.output }}</dd>
-                    </div>
-                </dl>
-            </section>
-            {% endfor %}
-        </div>
-    </section>
-
-    {% for table in result.supporting_tables %}
-    <section class="panel">
-        <div class="panel-heading">
-            <h2>{{ table.title }}</h2>
-            <span>{{ table.rows|length }} rows</span>
-        </div>
-        <div class="table-wrap">
-            <table>
-                <thead>
-                    <tr>
-                        {% for column in table.columns %}
-                        <th>{{ column.replace("_", " ") }}</th>
-                        {% endfor %}
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for row in table.rows %}
-                    <tr>
-                        {% for column in table.columns %}
-                        <td>{{ row[column]|money if "revenue" in column or "price" in column or "value" in column or column == "avg_deal" else row[column] }}</td>
-                        {% endfor %}
-                    </tr>
-                    {% else %}
-                    <tr><td colspan="{{ table.columns|length }}" class="empty">No matching records.</td></tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
-    </section>
-    {% endfor %}
     {% endif %}
 {% endif %}
 {% endblock %}
