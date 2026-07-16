@@ -40,6 +40,7 @@ AutoOps is a full-stack Flask demo for a dealership operations team. It turns a 
 - Sales records with pending/completed states
 - Completing a sale automatically updates the vehicle inventory status
 - Dashboard metrics for inventory, monthly units, monthly revenue, average deal size, monthly trend, rep ranking, recent deals, and stock aging
+- AutoOps Copilot for rule-based natural-language analytics, safe SQL template generation, query execution, result tables, and bar charts
 - Seed data for realistic screenshots and quick demonstrations
 
 ## Tech stack
@@ -49,6 +50,7 @@ AutoOps is a full-stack Flask demo for a dealership operations team. It turns a 
 - SQLite for local development
 - Jinja templates
 - HTML/CSS
+- Rule-based NL2SQL templates
 - Gunicorn for production-style serving
 
 ## Project structure
@@ -59,6 +61,7 @@ autoops/
 │   ├── routes/
 │   ├── static/
 │   ├── templates/
+│   ├── copilot.py
 │   ├── __init__.py
 │   └── db.py
 ├── database/
@@ -141,5 +144,5 @@ This project can be presented as an independently rebuilt and extended full-stac
 - Add role-based permissions for manager and sales staff
 - Add pagination for large inventory tables
 - Add CSV import/export
-- Add an AI-assisted weekly sales summary based on dashboard metrics
+- Add an LLM-assisted weekly sales summary based on dashboard metrics
 - Record a two-minute product walkthrough video

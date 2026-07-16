@@ -1,0 +1,118 @@
+{% extends "base.html" %}
+{% block title %}Copilot - AutoOps{% endblock %}
+{% block content %}
+<header class="page-header">
+    <div>
+        <p class="eyebrow">Natural language analytics</p>
+        <h1>AutoOps Copilot</h1>
+    </div>
+</header>
+
+<section class="copilot-layout">
+    <div class="panel copilot-query-panel">
+        <div class="panel-heading">
+            <h2>Ask operations data</h2>
+            <span>Template-based NL2SQL MVP</span>
+        </div>
+        <form method="post" class="copilot-form">
+            <label>
+                Natural language question
+                <textarea name="question" rows="4" placeholder="e.g. 查询过去三个月销量最高的三个品牌" required>{{ question }}</textarea>
+            </label>
+            <button class="primary-button" type="submit">Run query</button>
+        </form>
+        <div class="example-list" aria-label="Example questions">
+            {% for example in examples %}
+            <a href="{{ url_for('main.copilot', q=example) }}">{{ example }}</a>
+            {% endfor %}
+        </div>
+    </div>
+
+    <aside class="panel">
+        <div class="panel-heading">
+            <h2>Supported intents</h2>
+        </div>
+        <ul class="plain-list">
+            <li>Brand sales ranking by units or revenue</li>
+            <li>Sales representative performance</li>
+            <li>Inventory grouped by brand</li>
+            <li>Monthly sales trend</li>
+            <li>Customer value ranking</li>
+        </ul>
+    </aside>
+</section>
+
+{% if result %}
+    {% if result.unsupported %}
+    <section class="panel">
+        <p class="empty">{{ result.summary }}</p>
+    </section>
+    {% else %}
+    <section class="result-grid">
+        <article class="panel">
+            <div class="panel-heading">
+                <h2>Generated SQL</h2>
+                <span>{{ result.intent }}</span>
+            </div>
+            <pre class="sql-box"><code>{{ result.sql }}</code></pre>
+            <div class="entity-grid">
+                {% for key, value in result.entities.items() %}
+                <span><strong>{{ key.replace("_", " ") }}</strong>{{ value }}</span>
+                {% endfor %}
+            </div>
+        </article>
+
+        <article class="panel">
+            <div class="panel-heading">
+                <h2>Chart</h2>
+                <span>{{ result.summary }}</span>
+            </div>
+            <div class="bar-list copilot-bars">
+                {% for row in result.rows %}
+                {% set label = row[result.chart_label] %}
+                {% set value = row[result.chart_value] or 0 %}
+                <div class="bar-row">
+                    <span>{{ label }}</span>
+                    <div class="bar-track">
+                        <div class="bar-fill" style="width: {{ (value / result.max_value * 100) if result.max_value else 0 }}%"></div>
+                    </div>
+                    <strong>{{ value|money if result.chart_value == "revenue" else value }}</strong>
+                </div>
+                {% else %}
+                <p class="empty">No matching records.</p>
+                {% endfor %}
+            </div>
+        </article>
+    </section>
+
+    <section class="panel">
+        <div class="panel-heading">
+            <h2>Result table</h2>
+            <span>{{ result.rows|length }} rows</span>
+        </div>
+        <div class="table-wrap">
+            <table>
+                <thead>
+                    <tr>
+                        {% for column in result.columns %}
+                        <th>{{ column.replace("_", " ") }}</th>
+                        {% endfor %}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for row in result.rows %}
+                    <tr>
+                        {% for column in result.columns %}
+                        <td>{{ row[column]|money if column == "revenue" or column == "avg_price" else row[column] }}</td>
+                        {% endfor %}
+                    </tr>
+                    {% else %}
+                    <tr><td colspan="{{ result.columns|length }}" class="empty">No matching records.</td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </section>
+    {% endif %}
+{% endif %}
+{% endblock %}

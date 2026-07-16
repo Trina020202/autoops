@@ -2,6 +2,7 @@ from datetime import date
 
 from flask import Blueprint, flash, redirect, render_template, request, url_for
 
+from app.copilot import run_copilot_query
 from app.db import get_db
 from app.routes.auth import login_required
 
@@ -104,6 +105,26 @@ def dashboard():
         max_rep_revenue=max_rep_revenue,
         recent_sales=recent_sales,
         stock_alerts=stock_alerts,
+    )
+
+
+@bp.route("/copilot", methods=("GET", "POST"))
+@login_required
+def copilot():
+    examples = [
+        "查询过去三个月销量最高的三个品牌",
+        "本月销售额最高的销售人员",
+        "库存最多的五个品牌",
+        "查看月度销售额趋势",
+        "销售额最高的客户",
+    ]
+    question = request.form.get("question", request.args.get("q", "")).strip()
+    result = run_copilot_query(get_db(), question) if question else None
+    return render_template(
+        "copilot.html",
+        examples=examples,
+        question=question,
+        result=result,
     )
 
 

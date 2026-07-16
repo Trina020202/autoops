@@ -79,6 +79,29 @@ class AutoOpsTestCase(unittest.TestCase):
         inventory = self.client.get("/vehicles?status=sold")
         self.assertIn(b"BYD", inventory.data)
 
+    def test_copilot_brand_query(self):
+        self.login()
+        response = self.client.post(
+            "/copilot",
+            data={"question": "查询过去三个月销量最高的三个品牌"},
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertIn(b"AutoOps Copilot", response.data)
+        self.assertIn(b"Generated SQL", response.data)
+        self.assertIn(b"BYD", response.data)
+        self.assertIn(b"XPeng", response.data)
+
+    def test_copilot_blocks_write_queries(self):
+        self.login()
+        response = self.client.post(
+            "/copilot",
+            data={"question": "drop table vehicles"},
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertIn(b"read-only operational questions", response.data)
+        vehicles = self.client.get("/vehicles")
+        self.assertIn(b"Vehicle management", vehicles.data)
+
 
 if __name__ == "__main__":
     unittest.main()

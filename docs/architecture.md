@@ -9,6 +9,9 @@ Browser
 Flask routes
   |
   v
+Copilot intent parser + SQL templates
+  |
+  v
 Jinja templates + CSS
   |
   v
@@ -25,6 +28,7 @@ SQLite database
 | `/login` | Sign in with demo account |
 | `/logout` | Clear session |
 | `/dashboard` | Metrics, recent sales, stock watch |
+| `/copilot` | Natural-language analytics assistant |
 | `/vehicles` | Search/filter inventory |
 | `/vehicles/new` | Add vehicle |
 | `/vehicles/<id>/edit` | Edit vehicle |
@@ -83,3 +87,5 @@ sales
 - Sale date cannot be earlier than the vehicle acquired date.
 - Completed sale updates vehicle status to `sold`.
 - Pending sale updates vehicle status to `reserved`.
+- Copilot only runs predefined read-only SELECT templates.
+- Questions containing write-operation keywords such as DROP, DELETE, UPDATE, INSERT, ALTER, or TRUNCATE are blocked.
