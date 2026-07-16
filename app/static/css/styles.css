@@ -472,7 +472,8 @@ textarea {
 }
 
 .copilot-layout,
-.result-grid {
+.result-grid,
+.agent-grid {
     display: grid;
     grid-template-columns: minmax(0, 1.35fr) minmax(280px, 0.65fr);
     gap: 18px;
@@ -566,6 +567,105 @@ textarea {
     align-content: start;
 }
 
+.insight-list {
+    display: grid;
+    gap: 10px;
+}
+
+.insight-list p {
+    margin: 0;
+    padding: 12px 14px;
+    border-left: 4px solid var(--brand);
+    border-radius: 8px;
+    background: #f6fbf9;
+    line-height: 1.55;
+}
+
+.knowledge-list,
+.tool-call-list,
+.step-list {
+    display: grid;
+    gap: 12px;
+}
+
+.knowledge-item,
+.tool-call {
+    padding: 13px;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    background: #f8fafb;
+}
+
+.knowledge-item strong,
+.knowledge-item span,
+.tool-call strong,
+.tool-call p {
+    display: block;
+}
+
+.knowledge-item span {
+    margin-top: 4px;
+    color: var(--muted);
+    font-size: 0.8rem;
+    font-weight: 700;
+}
+
+.knowledge-item p,
+.tool-call p {
+    margin: 10px 0 0;
+    color: var(--ink);
+    font-size: 0.9rem;
+    line-height: 1.5;
+}
+
+.step-list {
+    margin: 0;
+    padding-left: 22px;
+}
+
+.step-list li {
+    padding-left: 4px;
+}
+
+.step-list strong,
+.step-list span {
+    display: block;
+}
+
+.step-list span {
+    margin-top: 4px;
+    color: var(--muted);
+    font-size: 0.9rem;
+    line-height: 1.45;
+}
+
+.tool-call dl {
+    display: grid;
+    gap: 8px;
+    margin: 12px 0 0;
+}
+
+.tool-call dl div {
+    display: grid;
+    grid-template-columns: 80px minmax(0, 1fr);
+    gap: 10px;
+}
+
+.tool-call dt {
+    color: var(--muted);
+    font-size: 0.78rem;
+    font-weight: 800;
+    text-transform: uppercase;
+}
+
+.tool-call dd {
+    margin: 0;
+    overflow-wrap: anywhere;
+    font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+    font-size: 0.82rem;
+    line-height: 1.45;
+}
+
 @media (max-width: 940px) {
     .shell {
         grid-template-columns: 1fr;
@@ -588,6 +688,7 @@ textarea {
     .two-column,
     .copilot-layout,
     .result-grid,
+    .agent-grid,
     .form-grid,
     .login-panel {
         grid-template-columns: 1fr;

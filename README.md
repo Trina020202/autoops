@@ -1,6 +1,6 @@
 # AutoOps - Car Sales Operations Dashboard
 
-AutoOps is a full-stack Flask demo for a dealership operations team. It turns a classroom-style car sales database idea into a runnable product demo with login, inventory management, sales workflow, customer records, and an operations dashboard.
+AutoOps is a full-stack Flask demo for a dealership operations team. It turns a classroom-style car sales database idea into a runnable product demo with login, inventory management, sales workflow, customer records, an operations dashboard, and an AI Sales Analyst for natural-language operating questions.
 
 This project uses mock data for demonstration purposes only. No real customer, sales, or company data is included.
 
@@ -42,7 +42,8 @@ This project uses mock data for demonstration purposes only. No real customer, s
 - Sales records with pending/completed states
 - Completing a sale automatically updates the vehicle inventory status
 - Dashboard metrics for inventory, monthly units, monthly revenue, average deal size, monthly trend, rep ranking, recent deals, and stock aging
-- AutoOps Copilot for rule-based natural-language analytics, safe SQL template generation, query execution, result tables, and bar charts
+- AutoOps AI Sales Analyst with RAG-style database knowledge retrieval, safe NL2SQL generation, tool-calling workflow, query execution, result tables, bar charts, and generated business insights
+- Multi-step diagnosis flow for questions such as sales decline analysis, combining revenue trend, inventory, pending pipeline, metric calculation, and report generation
 - Seed data for realistic screenshots and quick demonstrations
 
 ## Tech stack
@@ -52,7 +53,9 @@ This project uses mock data for demonstration purposes only. No real customer, s
 - SQLite for local development
 - Jinja templates
 - HTML/CSS
+- RAG-style documentation retrieval
 - Rule-based NL2SQL templates
+- Tool-calling style agent orchestration
 - Gunicorn for production-style serving
 
 ## Project structure
@@ -63,12 +66,18 @@ autoops/
 │   ├── routes/
 │   ├── static/
 │   ├── templates/
+│   ├── analyst.py
 │   ├── copilot.py
 │   ├── __init__.py
 │   └── db.py
 ├── database/
 │   ├── schema.sql
 │   └── seed.sql
+├── database_docs/
+│   ├── schema.md
+│   ├── business_rules.md
+│   ├── metric_definitions.md
+│   └── examples.md
 ├── docs/
 ├── tests/
 ├── app.py
@@ -136,6 +145,20 @@ Core workflow:
 Sign in -> Review dashboard -> Search inventory -> Add or edit vehicle -> Create sale -> Complete sale -> Dashboard updates
 ```
 
+AI Sales Analyst workflow:
+
+```text
+Business question
+  -> retrieve schema docs, metric definitions, business rules, and SQL examples
+  -> select intent or multi-step plan
+  -> call read-only database tools
+  -> calculate metrics
+  -> generate chart data
+  -> generate analyst report
+```
+
+The current implementation uses a deterministic local retrieval and planning layer so the live demo works without API keys. It is designed to be upgraded to LangChain, FAISS/Chroma, and an OpenAI/Qwen/DeepSeek model when a production LLM key is available.
+
 ## Independent work statement
 
 This project can be presented as an independently rebuilt and extended full-stack demo inspired by a university database assignment. If you reuse any original group-project code later, keep that statement in the README and explain which parts you rebuilt yourself.
@@ -143,8 +166,10 @@ This project can be presented as an independently rebuilt and extended full-stac
 ## Next improvements
 
 - Replace SQLite with PostgreSQL for cloud deployment
+- Add optional LangChain + FAISS/Chroma retrieval backend
+- Add optional OpenAI/Qwen/DeepSeek LLM provider for free-form reasoning
 - Add role-based permissions for manager and sales staff
 - Add pagination for large inventory tables
 - Add CSV import/export
-- Add an LLM-assisted weekly sales summary based on dashboard metrics
+- Add one-click PDF/CSV export for generated analyst reports
 - Record a two-minute product walkthrough video

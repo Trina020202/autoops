@@ -2,7 +2,7 @@ from datetime import date
 
 from flask import Blueprint, flash, redirect, render_template, request, url_for
 
-from app.copilot import run_copilot_query
+from app.analyst import run_sales_analyst
 from app.db import get_db
 from app.routes.auth import login_required
 
@@ -113,13 +113,14 @@ def dashboard():
 def copilot():
     examples = [
         "查询过去三个月销量最高的三个品牌",
+        "Compare XPeng and BYD sales performance this year",
+        "Analyze why sales decreased in Q2 and suggest actions",
         "本月销售额最高的销售人员",
         "库存最多的五个品牌",
         "查看月度销售额趋势",
-        "销售额最高的客户",
     ]
     question = request.form.get("question", request.args.get("q", "")).strip()
-    result = run_copilot_query(get_db(), question) if question else None
+    result = run_sales_analyst(get_db(), question) if question else None
     return render_template(
         "copilot.html",
         examples=examples,
