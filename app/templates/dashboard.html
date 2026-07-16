@@ -1,0 +1,129 @@
+{% extends "base.html" %}
+{% block title %}Dashboard - AutoOps{% endblock %}
+{% block content %}
+<header class="page-header">
+    <div>
+        <p class="eyebrow">Operations overview</p>
+        <h1>Sales dashboard</h1>
+    </div>
+    <a class="primary-button" href="{{ url_for('main.sale_new') }}">New sale</a>
+</header>
+
+<section class="metric-grid" aria-label="Key metrics">
+    <article class="metric">
+        <span>Active inventory</span>
+        <strong>{{ metrics.active_inventory }}</strong>
+        <small>Available or reserved vehicles</small>
+    </article>
+    <article class="metric">
+        <span>Units sold this month</span>
+        <strong>{{ metrics.month_units }}</strong>
+        <small>Completed deals in current month</small>
+    </article>
+    <article class="metric">
+        <span>Monthly revenue</span>
+        <strong>{{ metrics.month_revenue|money }}</strong>
+        <small>Completed sales only</small>
+    </article>
+    <article class="metric">
+        <span>Average deal</span>
+        <strong>{{ metrics.avg_deal|money }}</strong>
+        <small>All completed sales</small>
+    </article>
+</section>
+
+<section class="two-column">
+    <article class="panel">
+        <div class="panel-heading">
+            <h2>Revenue trend</h2>
+            <span>Last 6 active months</span>
+        </div>
+        <div class="bar-list">
+            {% for row in monthly %}
+            <div class="bar-row">
+                <span>{{ row.month }}</span>
+                <div class="bar-track">
+                    <div class="bar-fill" style="width: {{ (row.revenue / max_revenue * 100) if max_revenue else 0 }}%"></div>
+                </div>
+                <strong>{{ row.revenue|money }}</strong>
+            </div>
+            {% else %}
+            <p class="empty">No completed sales yet.</p>
+            {% endfor %}
+        </div>
+    </article>
+
+    <article class="panel">
+        <div class="panel-heading">
+            <h2>Sales reps</h2>
+            <span>By revenue</span>
+        </div>
+        <div class="bar-list">
+            {% for row in top_reps %}
+            <div class="bar-row">
+                <span>{{ row.sales_rep }}</span>
+                <div class="bar-track">
+                    <div class="bar-fill alt" style="width: {{ (row.revenue / max_rep_revenue * 100) if max_rep_revenue else 0 }}%"></div>
+                </div>
+                <strong>{{ row.units }} units</strong>
+            </div>
+            {% else %}
+            <p class="empty">No sales rep data.</p>
+            {% endfor %}
+        </div>
+    </article>
+</section>
+
+<section class="two-column">
+    <article class="panel">
+        <div class="panel-heading">
+            <h2>Recent sales</h2>
+            <a href="{{ url_for('main.sales') }}">View all</a>
+        </div>
+        <div class="table-wrap compact">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Vehicle</th>
+                        <th>Customer</th>
+                        <th>Status</th>
+                        <th>Amount</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for sale in recent_sales %}
+                    <tr>
+                        <td>{{ sale.brand }} {{ sale.model }}</td>
+                        <td>{{ sale.customer_name }}</td>
+                        <td><span class="status {{ sale.status }}">{{ sale.status|status_label }}</span></td>
+                        <td>{{ sale.sale_price|money }}</td>
+                    </tr>
+                    {% else %}
+                    <tr><td colspan="4" class="empty">No sales records.</td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </article>
+
+    <article class="panel">
+        <div class="panel-heading">
+            <h2>Stock watch</h2>
+            <a href="{{ url_for('main.vehicles') }}">Manage</a>
+        </div>
+        <div class="stock-list">
+            {% for car in stock_alerts %}
+            <a class="stock-item" href="{{ url_for('main.vehicle_edit', vehicle_id=car.id) }}">
+                <span>
+                    <strong>{{ car.brand }} {{ car.model }}</strong>
+                    <small>{{ car.year }} / {{ car.price|money }}</small>
+                </span>
+                <em>{{ car.days_in_stock }} days</em>
+            </a>
+            {% else %}
+            <p class="empty">No active inventory.</p>
+            {% endfor %}
+        </div>
+    </article>
+</section>
+{% endblock %}

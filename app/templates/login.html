@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Sign in - AutoOps</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body class="login-page">
+    <main class="login-panel">
+        <div class="login-copy">
+            <span class="brand-mark">AO</span>
+            <h1>AutoOps</h1>
+            <p>Car inventory and sales operations console for dealership teams.</p>
+        </div>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="flash-stack">
+                {% for category, message in messages %}
+                    <div class="flash {{ category }}">{{ message }}</div>
+                {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+        <form method="post" class="form-card">
+            <label>
+                Email
+                <input name="email" type="email" value="demo@autoops.local" required>
+            </label>
+            <label>
+                Password
+                <input name="password" type="password" value="autoops123" required>
+            </label>
+            <button class="primary-button" type="submit">Sign in</button>
+            <p class="hint">Demo account: demo@autoops.local / autoops123</p>
+        </form>
+    </main>
+</body>
+</html>

@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block title %}Customers - AutoOps{% endblock %}
+{% block content %}
+<header class="page-header">
+    <div>
+        <p class="eyebrow">CRM</p>
+        <h1>Customer management</h1>
+    </div>
+    <a class="primary-button" href="{{ url_for('main.customer_new') }}">Add customer</a>
+</header>
+
+<form class="filters" method="get">
+    <input name="q" value="{{ q }}" placeholder="Search name, phone, email, city">
+    <button class="secondary-button" type="submit">Search</button>
+</form>
+
+<section class="panel">
+    <div class="table-wrap">
+        <table>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Phone</th>
+                    <th>Email</th>
+                    <th>City</th>
+                    <th>Purchases</th>
+                    <th>Lifetime value</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for customer in customers %}
+                <tr>
+                    <td><strong>{{ customer.name }}</strong></td>
+                    <td>{{ customer.phone }}</td>
+                    <td>{{ customer.email }}</td>
+                    <td>{{ customer.city }}</td>
+                    <td>{{ customer.purchases }}</td>
+                    <td>{{ customer.lifetime_value|money }}</td>
+                </tr>
+                {% else %}
+                <tr><td colspan="6" class="empty">No customers found.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</section>
+{% endblock %}

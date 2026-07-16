@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% block title %}Vehicles - AutoOps{% endblock %}
+{% block content %}
+<header class="page-header">
+    <div>
+        <p class="eyebrow">Inventory</p>
+        <h1>Vehicle management</h1>
+    </div>
+    <a class="primary-button" href="{{ url_for('main.vehicle_new') }}">Add vehicle</a>
+</header>
+
+<form class="filters" method="get">
+    <input name="q" value="{{ q }}" placeholder="Search VIN, brand, model, color">
+    <select name="brand">
+        <option value="">All brands</option>
+        {% for item in brands %}
+        <option value="{{ item.brand }}" {% if brand == item.brand %}selected{% endif %}>{{ item.brand }}</option>
+        {% endfor %}
+    </select>
+    <select name="status">
+        <option value="">All status</option>
+        <option value="available" {% if status == "available" %}selected{% endif %}>Available</option>
+        <option value="reserved" {% if status == "reserved" %}selected{% endif %}>Reserved</option>
+        <option value="sold" {% if status == "sold" %}selected{% endif %}>Sold</option>
+    </select>
+    <button class="secondary-button" type="submit">Filter</button>
+</form>
+
+<section class="panel">
+    <div class="table-wrap">
+        <table>
+            <thead>
+                <tr>
+                    <th>Vehicle</th>
+                    <th>VIN</th>
+                    <th>Price</th>
+                    <th>Mileage</th>
+                    <th>Status</th>
+                    <th>Acquired</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for car in vehicles %}
+                <tr>
+                    <td>
+                        <strong>{{ car.brand }} {{ car.model }}</strong>
+                        <small>{{ car.year }} / {{ car.color }}</small>
+                    </td>
+                    <td>{{ car.vin }}</td>
+                    <td>{{ car.price|money }}</td>
+                    <td>{{ "{:,}".format(car.mileage) }}</td>
+                    <td><span class="status {{ car.status }}">{{ car.status|status_label }}</span></td>
+                    <td>{{ car.acquired_at }}</td>
+                    <td><a class="table-action" href="{{ url_for('main.vehicle_edit', vehicle_id=car.id) }}">Edit</a></td>
+                </tr>
+                {% else %}
+                <tr><td colspan="7" class="empty">No vehicles match your filters.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</section>
+{% endblock %}

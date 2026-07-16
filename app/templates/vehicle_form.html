@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% block title %}Vehicle form - AutoOps{% endblock %}
+{% block content %}
+<header class="page-header">
+    <div>
+        <p class="eyebrow">Inventory</p>
+        <h1>{{ "Edit vehicle" if vehicle else "Add vehicle" }}</h1>
+    </div>
+    <a class="secondary-button" href="{{ url_for('main.vehicles') }}">Back</a>
+</header>
+
+<form class="form-grid panel" method="post">
+    <label>
+        VIN
+        <input name="vin" value="{{ vehicle.vin if vehicle else '' }}" required>
+    </label>
+    <label>
+        Brand
+        <input name="brand" value="{{ vehicle.brand if vehicle else '' }}" required>
+    </label>
+    <label>
+        Model
+        <input name="model" value="{{ vehicle.model if vehicle else '' }}" required>
+    </label>
+    <label>
+        Year
+        <input name="year" type="number" min="2000" max="2030" value="{{ vehicle.year if vehicle else '2025' }}" required>
+    </label>
+    <label>
+        Price
+        <input name="price" type="number" min="1" step="100" value="{{ vehicle.price if vehicle else '' }}" required>
+    </label>
+    <label>
+        Color
+        <input name="color" value="{{ vehicle.color if vehicle else '' }}">
+    </label>
+    <label>
+        Mileage
+        <input name="mileage" type="number" min="0" value="{{ vehicle.mileage if vehicle else '0' }}" required>
+    </label>
+    <label>
+        Status
+        <select name="status">
+            <option value="available" {% if vehicle and vehicle.status == "available" %}selected{% endif %}>Available</option>
+            <option value="reserved" {% if vehicle and vehicle.status == "reserved" %}selected{% endif %}>Reserved</option>
+            <option value="sold" {% if vehicle and vehicle.status == "sold" %}selected{% endif %}>Sold</option>
+        </select>
+    </label>
+    <label>
+        Acquired date
+        <input name="acquired_at" type="date" value="{{ vehicle.acquired_at if vehicle else '' }}">
+    </label>
+    <div class="form-actions">
+        <button class="primary-button" type="submit">Save vehicle</button>
+    </div>
+</form>
+{% endblock %}

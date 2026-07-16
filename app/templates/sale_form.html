@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% block title %}Create sale - AutoOps{% endblock %}
+{% block content %}
+<header class="page-header">
+    <div>
+        <p class="eyebrow">Deal flow</p>
+        <h1>Create sale</h1>
+    </div>
+    <a class="secondary-button" href="{{ url_for('main.sales') }}">Back</a>
+</header>
+
+<form class="form-grid panel" method="post">
+    <label>
+        Vehicle
+        <select name="vehicle_id" required>
+            <option value="">Select vehicle</option>
+            {% for car in vehicles %}
+            <option value="{{ car.id }}">{{ car.brand }} {{ car.model }} / {{ car.year }} / {{ car.price|money }}</option>
+            {% endfor %}
+        </select>
+    </label>
+    <label>
+        Customer
+        <select name="customer_id" required>
+            <option value="">Select customer</option>
+            {% for customer in customers %}
+            <option value="{{ customer.id }}">{{ customer.name }} / {{ customer.phone }}</option>
+            {% endfor %}
+        </select>
+    </label>
+    <label>
+        Sales rep
+        <input name="sales_rep" placeholder="e.g. Cindy Zhou" required>
+    </label>
+    <label>
+        Sale price
+        <input name="sale_price" type="number" min="1" step="100" required>
+    </label>
+    <label>
+        Status
+        <select name="status">
+            <option value="pending">Pending</option>
+            <option value="completed">Completed</option>
+        </select>
+    </label>
+    <label>
+        Deal date
+        <input name="sold_at" type="date">
+    </label>
+    <label class="full-span">
+        Notes
+        <textarea name="notes" rows="4" placeholder="Delivery request, finance status, trade-in notes"></textarea>
+    </label>
+    <div class="form-actions">
+        <button class="primary-button" type="submit">Save sale</button>
+    </div>
+</form>
+{% endblock %}

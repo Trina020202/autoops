@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}New customer - AutoOps{% endblock %}
+{% block content %}
+<header class="page-header">
+    <div>
+        <p class="eyebrow">CRM</p>
+        <h1>Add customer</h1>
+    </div>
+    <a class="secondary-button" href="{{ url_for('main.customers') }}">Back</a>
+</header>
+
+<form class="form-grid panel" method="post">
+    <label>
+        Name
+        <input name="name" required>
+    </label>
+    <label>
+        Phone
+        <input name="phone" required>
+    </label>
+    <label>
+        Email
+        <input name="email" type="email">
+    </label>
+    <label>
+        City
+        <input name="city">
+    </label>
+    <div class="form-actions">
+        <button class="primary-button" type="submit">Save customer</button>
+    </div>
+</form>
+{% endblock %}
