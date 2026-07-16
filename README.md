@@ -2,6 +2,8 @@
 
 AutoOps is a full-stack Flask demo for a dealership operations team. It turns a classroom-style car sales database idea into a runnable product demo with login, inventory management, sales workflow, customer records, and an operations dashboard.
 
+This project uses mock data for demonstration purposes only. No real customer, sales, or company data is included.
+
 ## Live demo
 
 - URL: https://autoops-xzto.onrender.com
