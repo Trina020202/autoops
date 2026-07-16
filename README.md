@@ -85,6 +85,18 @@ cd autoops
 python3 app.py
 ```
 
+## Deploy to Render
+
+This repository includes `render.yaml`, so Render can detect the web service configuration automatically.
+
+Manual settings:
+
+- Build command: `pip install -r requirements.txt`
+- Start command: `gunicorn app:app`
+- Environment variables:
+  - `SECRET_KEY`: generated or any long random value
+  - `AUTOOPS_DATABASE`: `/tmp/autoops.sqlite`
+
 ## Reset local data
 
 Delete the generated SQLite database and restart the app:

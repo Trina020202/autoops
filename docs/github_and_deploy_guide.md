@@ -43,6 +43,20 @@ Replace `YOUR_USERNAME` with your GitHub username.
 
 Render works well for a quick Flask demo.
 
+The repository now includes `render.yaml`, so the easiest path is to create a Render Blueprint from the GitHub repository. Render will read the service name, runtime, build command, start command, and environment variables from that file.
+
+### Option A: Blueprint deploy
+
+1. Push the latest code to GitHub.
+2. Go to Render.
+3. Choose `New` -> `Blueprint`.
+4. Connect the `Trina020202/autoops` GitHub repository.
+5. Confirm the detected service named `autoops`.
+6. Click `Apply` or `Deploy`.
+7. Wait until the deploy status becomes `Live`.
+
+### Option B: Manual Web Service deploy
+
 1. Push code to GitHub first.
 2. Go to Render and create a new Web Service.
 3. Connect the GitHub repository.
@@ -63,9 +77,19 @@ gunicorn app:app
 
 ```text
 SECRET_KEY=use-a-long-random-secret
+AUTOOPS_DATABASE=/tmp/autoops.sqlite
 ```
 
 8. Deploy.
+
+After deployment, open the Render URL and sign in with:
+
+```text
+demo@autoops.local
+autoops123
+```
+
+Only add the live demo link to your resume after the Render URL opens successfully.
 
 ## 5. PostgreSQL upgrade path
 
