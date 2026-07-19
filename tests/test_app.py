@@ -86,10 +86,49 @@ class AutoOpsTestCase(unittest.TestCase):
             data={"question": "查询过去三个月销量最高的三个品牌"},
         )
         self.assertEqual(response.status_code, 200)
-        self.assertIn(b"AutoOps Copilot", response.data)
+        self.assertIn(b"AutoOps AI Sales Analyst", response.data)
+        self.assertIn(b"Retrieved knowledge", response.data)
+        self.assertIn(b"Tool calls", response.data)
         self.assertIn(b"Generated SQL", response.data)
         self.assertIn(b"BYD", response.data)
         self.assertIn(b"XPeng", response.data)
+
+    def test_sales_analyst_brand_comparison(self):
+        self.login()
+        response = self.client.post(
+            "/copilot",
+            data={"question": "Compare XPeng and BYD sales performance this year"},
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertIn(b"rag_agent_brand_comparison", response.data)
+        self.assertIn(b"calculate_metric()", response.data)
+        self.assertIn(b"avg deal", response.data)
+
+    def test_sales_analyst_diagnosis(self):
+        self.login()
+        response = self.client.post(
+            "/copilot",
+            data={"question": "Analyze why sales decreased in Q2 and suggest actions"},
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertIn(b"rag_agent_sales_decline_diagnosis", response.data)
+        self.assertIn(b"Pending pipeline by brand", response.data)
+        self.assertIn(b"Active inventory by brand", response.data)
+        self.assertIn(b"Guardrails", response.data)
+        self.assertIn(b"Latency", response.data)
+
+    def test_evaluations_page_shows_observability(self):
+        self.login()
+        self.client.post(
+            "/copilot",
+            data={"question": "Compare BMW and Tesla sales performance this year"},
+        )
+        response = self.client.get("/evaluations")
+        self.assertEqual(response.status_code, 200)
+        self.assertIn(b"Evaluation Console", response.data)
+        self.assertIn(b"Reference evaluation set", response.data)
+        self.assertIn(b"rag_agent_brand_comparison", response.data)
+        self.assertIn(b"SQL Sandbox", response.data)
 
     def test_copilot_blocks_write_queries(self):
         self.login()
@@ -99,6 +138,7 @@ class AutoOpsTestCase(unittest.TestCase):
         )
         self.assertEqual(response.status_code, 200)
         self.assertIn(b"read-only operational questions", response.data)
+        self.assertIn(b"blocked_by_guardrail", response.data)
         vehicles = self.client.get("/vehicles")
         self.assertIn(b"Vehicle management", vehicles.data)
 

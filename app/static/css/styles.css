@@ -472,7 +472,8 @@ textarea {
 }
 
 .copilot-layout,
-.result-grid {
+.result-grid,
+.agent-grid {
     display: grid;
     grid-template-columns: minmax(0, 1.35fr) minmax(280px, 0.65fr);
     gap: 18px;
@@ -566,6 +567,210 @@ textarea {
     align-content: start;
 }
 
+.architecture-strip {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 10px;
+    margin: 0 0 18px;
+}
+
+.architecture-strip article,
+.observability-grid span,
+.guardrail-grid article {
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    background: var(--panel);
+    box-shadow: var(--shadow);
+}
+
+.architecture-strip article {
+    display: grid;
+    gap: 8px;
+    min-height: 132px;
+    padding: 14px;
+}
+
+.architecture-strip strong,
+.guardrail-grid strong {
+    color: var(--brand-dark);
+}
+
+.architecture-strip span,
+.guardrail-grid p {
+    color: var(--muted);
+    font-size: 0.86rem;
+    line-height: 1.45;
+}
+
+.observability-grid {
+    display: grid;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    gap: 10px;
+    margin-bottom: 18px;
+}
+
+.observability-grid span {
+    display: grid;
+    gap: 5px;
+    min-height: 76px;
+    padding: 12px;
+    color: var(--muted);
+    font-size: 0.8rem;
+    font-weight: 700;
+}
+
+.observability-grid strong {
+    color: var(--ink);
+    font-size: 1.2rem;
+}
+
+.compact-observability {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    margin: 16px 0 0;
+}
+
+.insight-list {
+    display: grid;
+    gap: 10px;
+}
+
+.insight-list p {
+    margin: 0;
+    padding: 12px 14px;
+    border-left: 4px solid var(--brand);
+    border-radius: 8px;
+    background: #f6fbf9;
+    line-height: 1.55;
+}
+
+.knowledge-list,
+.tool-call-list,
+.step-list {
+    display: grid;
+    gap: 12px;
+}
+
+.knowledge-item,
+.tool-call {
+    padding: 13px;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    background: #f8fafb;
+}
+
+.knowledge-item strong,
+.knowledge-item span,
+.tool-call strong,
+.tool-call p {
+    display: block;
+}
+
+.tool-call strong {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.tool-call em,
+.guardrail-grid em {
+    display: inline-flex;
+    align-items: center;
+    min-height: 24px;
+    padding: 0 8px;
+    border-radius: 999px;
+    background: #dcfce7;
+    color: var(--success);
+    font-size: 0.74rem;
+    font-style: normal;
+    font-weight: 800;
+    text-transform: uppercase;
+}
+
+.knowledge-item span {
+    margin-top: 4px;
+    color: var(--muted);
+    font-size: 0.8rem;
+    font-weight: 700;
+}
+
+.knowledge-item p,
+.tool-call p {
+    margin: 10px 0 0;
+    color: var(--ink);
+    font-size: 0.9rem;
+    line-height: 1.5;
+}
+
+.step-list {
+    margin: 0;
+    padding-left: 22px;
+}
+
+.step-list li {
+    padding-left: 4px;
+}
+
+.step-list strong,
+.step-list span {
+    display: block;
+}
+
+.step-list span {
+    margin-top: 4px;
+    color: var(--muted);
+    font-size: 0.9rem;
+    line-height: 1.45;
+}
+
+.tool-call dl {
+    display: grid;
+    gap: 8px;
+    margin: 12px 0 0;
+}
+
+.tool-call dl div {
+    display: grid;
+    grid-template-columns: 80px minmax(0, 1fr);
+    gap: 10px;
+}
+
+.tool-call dt {
+    color: var(--muted);
+    font-size: 0.78rem;
+    font-weight: 800;
+    text-transform: uppercase;
+}
+
+.tool-call dd {
+    margin: 0;
+    overflow-wrap: anywhere;
+    font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+    font-size: 0.82rem;
+    line-height: 1.45;
+}
+
+.guardrail-grid {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 10px;
+}
+
+.guardrail-grid.single-column {
+    grid-template-columns: 1fr;
+}
+
+.guardrail-grid article {
+    display: grid;
+    gap: 8px;
+    padding: 13px;
+    box-shadow: none;
+}
+
+.guardrail-grid p {
+    margin: 0;
+}
+
 @media (max-width: 940px) {
     .shell {
         grid-template-columns: 1fr;
@@ -577,7 +782,7 @@ textarea {
     }
 
     .nav {
-        grid-template-columns: repeat(4, 1fr);
+        grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
     }
 
     .content {
@@ -588,6 +793,10 @@ textarea {
     .two-column,
     .copilot-layout,
     .result-grid,
+    .agent-grid,
+    .architecture-strip,
+    .observability-grid,
+    .guardrail-grid,
     .form-grid,
     .login-panel {
         grid-template-columns: 1fr;

@@ -1,0 +1,149 @@
+{% extends "base.html" %}
+{% block title %}Evaluations - AutoOps{% endblock %}
+{% block content %}
+<header class="page-header">
+    <div>
+        <p class="eyebrow">Agent observability</p>
+        <h1>Evaluation Console</h1>
+    </div>
+    <a class="secondary-button" href="{{ url_for('main.copilot') }}">Open AI Analyst</a>
+</header>
+
+<section class="metric-grid">
+    <article class="metric">
+        <span>Total runs</span>
+        <strong>{{ summary.total_runs }}</strong>
+        <small>Logged agent executions</small>
+    </article>
+    <article class="metric">
+        <span>Success rate</span>
+        <strong>{{ summary.success_rate }}%</strong>
+        <small>Includes blocked unsafe requests</small>
+    </article>
+    <article class="metric">
+        <span>Avg latency</span>
+        <strong>{{ summary.avg_latency_ms }}ms</strong>
+        <small>End-to-end agent runtime</small>
+    </article>
+    <article class="metric">
+        <span>Avg tools</span>
+        <strong>{{ summary.avg_tool_count }}</strong>
+        <small>Tool calls per run</small>
+    </article>
+</section>
+
+<section class="panel">
+    <div class="panel-heading">
+        <h2>Reference evaluation set</h2>
+        <span>{{ evaluation_cases|length }} cases</span>
+    </div>
+    <div class="table-wrap">
+        <table>
+            <thead>
+                <tr>
+                    <th>Question</th>
+                    <th>Expected intent</th>
+                    <th>Coverage</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for case in evaluation_cases %}
+                <tr>
+                    <td>{{ case.question }}</td>
+                    <td>{{ case.expected_intent }}</td>
+                    <td>{{ case.covers }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</section>
+
+<section class="two-column">
+    <article class="panel">
+        <div class="panel-heading">
+            <h2>Intent performance</h2>
+            <span>Recent aggregate</span>
+        </div>
+        <div class="table-wrap">
+            <table class="compact">
+                <thead>
+                    <tr>
+                        <th>Intent</th>
+                        <th>Runs</th>
+                        <th>Success</th>
+                        <th>Latency</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for row in intent_stats %}
+                    <tr>
+                        <td>{{ row.intent }}</td>
+                        <td>{{ row.runs }}</td>
+                        <td>{{ row.success_rate }}%</td>
+                        <td>{{ row.avg_latency_ms }}ms</td>
+                    </tr>
+                    {% else %}
+                    <tr><td colspan="4" class="empty">Run the AI Analyst to generate metrics.</td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </article>
+
+    <article class="panel">
+        <div class="panel-heading">
+            <h2>Guardrails</h2>
+            <span>Safety checks</span>
+        </div>
+        <div class="guardrail-grid single-column">
+            {% for guardrail in guardrails %}
+            <article>
+                <strong>{{ guardrail.name }}</strong>
+                <em>{{ guardrail.status }}</em>
+                <p>{{ guardrail.detail }}</p>
+            </article>
+            {% endfor %}
+        </div>
+    </article>
+</section>
+
+<section class="panel">
+    <div class="panel-heading">
+        <h2>Recent run log</h2>
+        <span>Last 10</span>
+    </div>
+    <div class="table-wrap">
+        <table>
+            <thead>
+                <tr>
+                    <th>Time</th>
+                    <th>Question</th>
+                    <th>Intent</th>
+                    <th>Safety</th>
+                    <th>Latency</th>
+                    <th>Tools</th>
+                    <th>Rows</th>
+                    <th>Tokens</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for run in recent_runs %}
+                <tr>
+                    <td>{{ run.created_at }}</td>
+                    <td>{{ run.question }}</td>
+                    <td>{{ run.intent }}</td>
+                    <td>{{ run.safety_status }}</td>
+                    <td>{{ run.latency_ms }}ms</td>
+                    <td>{{ run.tool_count }}</td>
+                    <td>{{ run.row_count }}</td>
+                    <td>{{ run.estimated_tokens }}</td>
+                </tr>
+                {% else %}
+                <tr><td colspan="8" class="empty">No agent runs logged yet.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</section>
+{% endblock %}

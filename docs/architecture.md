@@ -9,7 +9,22 @@ Browser
 Flask routes
   |
   v
-Copilot intent parser + SQL templates
+AI Sales Analyst
+  |
+  +--> RAG-style knowledge retriever
+  |      |
+  |      v
+  |   database_docs/
+  |
+  +--> Intent parser + SQL templates
+  |
+  +--> Tool-calling workflow
+         |
+         +--> sql_sandbox()
+         +--> query_database()
+         +--> calculate_metric()
+         +--> generate_chart()
+         +--> generate_report()
   |
   v
 Jinja templates + CSS
@@ -28,7 +43,8 @@ SQLite database
 | `/login` | Sign in with demo account |
 | `/logout` | Clear session |
 | `/dashboard` | Metrics, recent sales, stock watch |
-| `/copilot` | Natural-language analytics assistant |
+| `/copilot` | RAG-style AI Sales Analyst and natural-language analytics assistant |
+| `/evaluations` | Agent evaluation cases, run logs, latency, success rate, and safety guardrails |
 | `/vehicles` | Search/filter inventory |
 | `/vehicles/new` | Add vehicle |
 | `/vehicles/<id>/edit` | Edit vehicle |
@@ -76,6 +92,19 @@ sales
   status
   sold_at
   notes
+
+agent_runs
+  id
+  question
+  intent
+  success
+  safety_status
+  latency_ms
+  retrieved_chunks
+  tool_count
+  row_count
+  estimated_tokens
+  error
 ```
 
 ## Business rules
@@ -87,5 +116,47 @@ sales
 - Sale date cannot be earlier than the vehicle acquired date.
 - Completed sale updates vehicle status to `sold`.
 - Pending sale updates vehicle status to `reserved`.
-- Copilot only runs predefined read-only SELECT templates.
+- AI Sales Analyst only runs predefined read-only SELECT templates.
+- The knowledge retriever reads local database documentation from `database_docs/`.
+- Tool-call traces are displayed in the UI for transparency.
+- Multi-step diagnosis questions can run multiple read-only queries before generating an insight report.
+- Agent runs are logged for observability across success rate, latency, retrieved chunks, tool count, rows, and estimated token use.
 - Questions containing write-operation keywords such as DROP, DELETE, UPDATE, INSERT, ALTER, or TRUNCATE are blocked.
+
+## AI Sales Analyst design
+
+```text
+User question
+  |
+  v
+retrieve_knowledge()
+  |
+  v
+Plan intent or diagnosis workflow
+  |
+  v
+sql_sandbox()
+  |
+  v
+query_database() -----> SQLite
+  |
+  v
+calculate_metric()
+  |
+  v
+generate_chart()
+  |
+  v
+generate_report()
+```
+
+The current implementation is deterministic and does not require an LLM API key. This keeps the public demo stable. The module boundary in `app/analyst.py` is designed so an LLM planner, LangChain tools, and FAISS/Chroma retrieval can be added later without rewriting the Flask product surface.
+
+## Evaluation console
+
+The `/evaluations` route displays:
+
+- a reference set of business questions and expected intents,
+- aggregated intent performance,
+- recent run logs,
+- guardrails for read-only execution, row caps, sensitive table isolation, and trace logging.

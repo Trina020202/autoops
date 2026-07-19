@@ -1,7 +1,14 @@
 DROP TABLE IF EXISTS sales;
+DROP TABLE IF EXISTS agent_runs;
 DROP TABLE IF EXISTS vehicles;
 DROP TABLE IF EXISTS customers;
 DROP TABLE IF EXISTS users;
+DROP TABLE IF EXISTS app_metadata;
+
+CREATE TABLE app_metadata (
+    key TEXT PRIMARY KEY,
+    value TEXT NOT NULL
+);
 
 CREATE TABLE users (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -51,7 +58,24 @@ CREATE TABLE sales (
     FOREIGN KEY (customer_id) REFERENCES customers (id)
 );
 
+CREATE TABLE agent_runs (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    question TEXT NOT NULL,
+    intent TEXT NOT NULL,
+    success INTEGER NOT NULL DEFAULT 1,
+    safety_status TEXT NOT NULL DEFAULT 'passed',
+    latency_ms INTEGER NOT NULL DEFAULT 0,
+    retrieved_chunks INTEGER NOT NULL DEFAULT 0,
+    tool_count INTEGER NOT NULL DEFAULT 0,
+    row_count INTEGER NOT NULL DEFAULT 0,
+    estimated_tokens INTEGER NOT NULL DEFAULT 0,
+    error TEXT,
+    created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
 CREATE INDEX idx_vehicles_status ON vehicles(status);
 CREATE INDEX idx_vehicles_brand_model ON vehicles(brand, model);
 CREATE INDEX idx_sales_status ON sales(status);
 CREATE INDEX idx_sales_sold_at ON sales(sold_at);
+CREATE INDEX idx_agent_runs_created_at ON agent_runs(created_at);
+CREATE INDEX idx_agent_runs_intent ON agent_runs(intent);

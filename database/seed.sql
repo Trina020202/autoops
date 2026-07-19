@@ -8,7 +8,12 @@ INSERT INTO vehicles (vin, brand, model, year, price, color, mileage, status, ac
 ('XP9X920250007', 'XPeng', 'X9 Ultra', 2025, 50200, 'Starship Gray', 760, 'available', '2026-06-19'),
 ('BYDSEAL000008', 'BYD', 'Seal Performance', 2024, 33800, 'Atlantis Gray', 7300, 'available', '2026-04-27'),
 ('AITO7UL000009', 'AITO', 'M7 Ultra', 2025, 44200, 'Warm White', 1400, 'reserved', '2026-05-30'),
-('ZEEKR70000010', 'Zeekr', '007 Long Range', 2025, 35800, 'Dawn Blue', 980, 'available', '2026-06-02');
+('ZEEKR70000010', 'Zeekr', '007 Long Range', 2025, 35800, 'Dawn Blue', 980, 'available', '2026-06-02'),
+('BMWX3EV000011', 'BMW', 'iX3 M Sport', 2024, 62800, 'Mineral White', 3900, 'sold', '2026-01-05'),
+('TESMYLR000012', 'Tesla', 'Model Y Long Range', 2024, 48200, 'Midnight Silver', 4600, 'sold', '2026-02-02'),
+('BYDDOL000013', 'BYD', 'Dolphin Premium', 2024, 25200, 'Coral Pink', 6100, 'sold', '2026-03-29'),
+('XPP500000014', 'XPeng', 'P5 550E', 2024, 27800, 'Nebula Blue', 5300, 'sold', '2026-04-21'),
+('BMWIX3000015', 'BMW', 'iX3 Inspiring', 2025, 56800, 'Black Sapphire', 700, 'reserved', '2026-06-28');
 
 INSERT INTO customers (name, phone, email, city) VALUES
 ('Mia Chen', '+61 400 102 301', 'mia.chen@example.com', 'Sydney'),
@@ -24,4 +29,9 @@ INSERT INTO sales (vehicle_id, customer_id, sales_rep, sale_price, status, sold_
 (2, 3, 'Cindy Zhou', 37900, 'pending', '2026-07-10', 'Waiting for delivery slot.'),
 (9, 4, 'Daniel Wu', 43800, 'pending', '2026-07-12', 'Customer requested ceramic coating.'),
 (1, 5, 'Alex Tan', 30500, 'completed', '2026-07-03', 'Corporate employee discount.'),
-(8, 6, 'Cindy Zhou', 32900, 'completed', '2026-06-18', 'Online lead converted after test drive.');
+(8, 6, 'Cindy Zhou', 32900, 'completed', '2026-06-18', 'Online lead converted after test drive.'),
+(11, 1, 'Daniel Wu', 61200, 'completed', '2026-01-17', 'High-value EV SUV transaction.'),
+(12, 2, 'Cindy Zhou', 46900, 'completed', '2026-02-26', 'Repeat EV customer.'),
+(13, 3, 'Alex Tan', 24800, 'completed', '2026-04-12', 'Compact EV promotion.'),
+(14, 4, 'Daniel Wu', 26800, 'completed', '2026-05-09', 'Converted from weekend campaign.'),
+(15, 5, 'Daniel Wu', 55800, 'pending', '2026-07-18', 'Awaiting final insurance approval.');
